@@ -50,9 +50,11 @@ App = {
     var loader = $("#loader");
     var content = $("#content");
   
-    loader.show();
-    content.hide();
-  
+    //loader.show();
+    //content.hide();
+    loader.hide();
+    content.show();
+      
     // Load account data
     web3.eth.getCoinbase(function(err, account) {
       if (err === null) {
@@ -68,25 +70,28 @@ App = {
     }).then(function(candidatesCount) {
       var candidatesResults = $("#candidatesResults");
       candidatesResults.empty();
-  
+      
       var candidatesSelect = $('#candidatesSelect');
       candidatesSelect.empty();
-  
+
+
       for (var i = 1; i <= candidatesCount; i++) {
         electionInstance.candidates(i).then(function(candidate) {
           var id = candidate[0];
           var name = candidate[1];
           var voteCount = candidate[2];
+          var urlAvatar = candidate[3];
   
           // Render candidate Result
-          var candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>"
-          candidatesResults.append(candidateTemplate);
-  
+          var candidateTemp = '<div class="col-lg-6 container text-center" > <img src="' + urlAvatar + '" width="200" height="200"/> <h2>' + name + '</h2><h3>'+ voteCount  +'<span><img src="./images/vote-count.png" width="30" height="30"/></span></h3><button onclick="App.castVote('+id+'); return false;" class="btn btn-primary"><img src="./images/vote-button.png" width="50" height="50"/></button> </div>'
           // Render candidate ballot option
+          content.append(candidateTemp);
           var candidateOption = "<option value='" + id + "' >" + name + "</ option>"
           candidatesSelect.append(candidateOption);
         });
       }
+      
+
       return electionInstance.voters(App.account);
     }).then(function(hasVoted) {
       // Do not allow a user to vote
@@ -99,17 +104,18 @@ App = {
       console.warn(error);
     });
   },
-  castVote: function() {
-    var candidateId = $('#candidatesSelect').val();
-    App.contracts.Election.deployed().then(function(instance) {
-      return instance.vote(candidateId, { from: App.account });
-    }).then(function(result) {
-      // Wait for votes to update
-      $("#content").hide();
-      $("#loader").show();
-    }).catch(function(err) {
-      console.error(err);
-    });
+  castVote: function(id) {
+    // var candidateId = $('#candidatesSelect').val();
+    // App.contracts.Election.deployed().then(function(instance) {
+    //   return instance.vote(candidateId, { from: App.account });
+    // }).then(function(result) {
+    //   // Wait for votes to update
+    //   $("#content").hide();
+    //   $("#loader").show();
+    // }).catch(function(err) {
+    //   console.error(err);
+    // });
+    console.log(id);
   }
 };
 

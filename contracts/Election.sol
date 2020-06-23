@@ -7,6 +7,7 @@ contract Election {
         uint id;
         string name;
         uint voteCount;
+        string urlAvatar;
     }
     event votedEvent (
         uint indexed _candidateId
@@ -23,12 +24,12 @@ contract Election {
 
     // Constructor
     constructor () public {
-        addCandidate("Barack Obama");
-        addCandidate("Bill Clinton");
+        addCandidate("Barack Obama", "./images/barack-obama.jpg");
+        addCandidate("Bill Clinton", "./images/bill-clinton.jpg");
     }
-function addCandidate (string memory  _name) private {
+function addCandidate (string memory _name, string memory _url) private {
         candidatesCount ++;
-        candidates[candidatesCount] = Candidate(candidatesCount, _name, 0);
+        candidates[candidatesCount] = Candidate(candidatesCount, _name, 0, _url);
     }
 
 function vote ( uint _candidateId) public {
