@@ -68,8 +68,8 @@ App = {
       electionInstance = instance;
       return electionInstance.candidatesCount();
     }).then(function(candidatesCount) {
-      var candidatesResults = $("#candidatesResults");
-      candidatesResults.empty();
+      var content = $("#content");
+      content.empty();
       
       var candidatesSelect = $('#candidatesSelect');
       candidatesSelect.empty();
@@ -104,17 +104,17 @@ App = {
       console.warn(error);
     });
   },
-  castVote: function(id) {
+  castVote: function(candidateId) {
     // var candidateId = $('#candidatesSelect').val();
-    // App.contracts.Election.deployed().then(function(instance) {
-    //   return instance.vote(candidateId, { from: App.account });
-    // }).then(function(result) {
-    //   // Wait for votes to update
-    //   $("#content").hide();
-    //   $("#loader").show();
-    // }).catch(function(err) {
-    //   console.error(err);
-    // });
+    App.contracts.Election.deployed().then(function(instance) {
+      return instance.vote(candidateId, { from: App.account });
+    }).then(function(result) {
+      // Wait for votes to update
+      $("#content").hide();
+      $("#loader").show();
+    }).catch(function(err) {
+      console.error(err);
+    });
     console.log(id);
   }
 };
